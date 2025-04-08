@@ -3,16 +3,29 @@
 @section('content')
 
     <div class="container mt-4">
+
+      <div class="mb-4">
+        <a href="{{ url("posts/create") }}" class="btn btn-outline-success"> New post </a>
+      </div>
+
         <div class="card">
             <div class="card-header text-center">
-              Featured
+              Posts 
             </div>
 
               @foreach ($posts as $post)
                 <div class="card-body">
                   <h5 class="card-title">{{ $post->name }} </h5>
                   <p class="card-text">{{  $post->description }} </p>
-                  <a href="" class="btn btn-outline-primary"> View </a>
+                  <p class="card-text"> <span class="text-danger"> Category :</span>  {{  $post->category->name }} </p>
+                  <form method="POST" action="{{ route("posts.destroy", ['post' => $post->id ]) }}">
+                        <a href="{{ route("posts.show", ['post' => $post->id]) }}" class="btn btn-outline-secondary"> View </a>
+                        <a href="{{ route("posts.edit", ['post' => $post->id ]) }}" class="btn btn-outline-primary"> update </a>
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-outline-danger"> delete </button>                  
+                  </form>
+
                 </div>  
                 <hr>
               @endforeach
