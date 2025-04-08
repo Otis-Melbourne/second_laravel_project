@@ -1,21 +1,14 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
-<<<<<<< HEAD
-Route::get('/', [ HomeController::class, 'index']);
 
-=======
-Route::get('/', function () {
-    return view('home');
-});
-
-Route::get('/about', function(){
-    return view('about');
-});
-
-Route::get('/contact', function(){
-    return view('contact');
-});
->>>>>>> c45eb2d42a368a9788516234da0499eae982e05c
+Route::resource('posts', PostController::class);
+Route::get('categories', function(){
+    $categories = Category::with('posts')->get();
+    dd($categories->toArray());
+} );
