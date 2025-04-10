@@ -33,6 +33,7 @@ class PostController extends Controller
     public function store(storePostRequest $request){
 
         $validated = $request->safe()->only(['name', 'description', 'category_id']);
+        // $validated = $request->validated();
         $post = new Post();
         $post->create($validated);
         return redirect('posts');
@@ -50,7 +51,9 @@ class PostController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post){
-        return view('edit', compact('post'));
+        $categories = Category::all();
+        // dd($categories->toArray());
+        return view('edit', ['post' => $post, 'categories' => $categories]);
     }
 
     /**
@@ -58,7 +61,7 @@ class PostController extends Controller
      */
     public function update(UpdatePost $request, string $id){
         $post = Post::findOrFail($id);
-        $validated = $request->safe()->only(['name', 'description']);
+        $validated = $request->validated();
         $post->update($validated);
         return redirect('posts');
     }

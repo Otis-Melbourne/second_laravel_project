@@ -13,13 +13,25 @@
                     <form class="container p-4" method="POST" action="{{ route("posts.update", ['post' => $post->id ]) }}">
                         @csrf
                         @method('PUT')
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-4">
                           <label for="title">Title </label>
                           <input name="name" type="text" class="form-control" value="{{ old('name', $post->name ) }}" id="title" placeholder="Enter title">
                           @error('name')
                               <p class="text-danger">{{ $message }} </p>
                           @enderror
                         </div>
+
+                        <div class="form-group mb-4">
+                            <select class="form-control" name="category_id">
+                              <option value=""> Select your category  </option>
+                              @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ $category['id'] === $post['category_id'] ? 'selected' : "" }}>{{ $category->name }} </option>
+                              @endforeach
+                            </select>
+                            @error('category_id')
+                                <p class="text-danger">{{ $message }} </p>
+                            @enderror
+                          </div>
 
                         <div class="form-group mb-3">
                             <label for="description"> Enter description </label>

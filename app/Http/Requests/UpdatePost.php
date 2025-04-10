@@ -24,6 +24,7 @@ class UpdatePost extends FormRequest
         return [
             'name' => "required|string|max:255|unique:posts",
             'description' => "required|string",
+            'category_id' => "required",
         ];
     }
 }

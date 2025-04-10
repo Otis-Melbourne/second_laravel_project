@@ -5,7 +5,15 @@
     <div class="container mt-4">
 
       <div class="mb-4">
-        <a href="{{ url("posts/create") }}" class="btn btn-outline-success"> New post </a>
+        <div class="mb-4">
+          <form action="{{ url("logout") }}" method="POST">
+            @csrf
+            <button type="submit" href="{{ url("logout") }}" class="btn btn-outline-danger"> Logout </button>
+            <a href="{{ url("posts/create") }}" class="btn btn-outline-success"> New post </a>
+          </form>
+
+        </div>
+
       </div>
 
         <div class="card">
