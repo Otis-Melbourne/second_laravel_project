@@ -25,6 +25,7 @@ class storePostRequest extends FormRequest
             'name' => "required|string|max:255|unique:posts,name",
             'description' => "required|string|max:1000",
             'category_id' => "required",
+            'user_id' => "required",
         ];
     }
 

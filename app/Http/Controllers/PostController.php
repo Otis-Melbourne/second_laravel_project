@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\storePostRequest;
-use App\Http\Requests\UpdatePost;
-use App\Models\Category;
 use App\Models\Post;
-use ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdatePost;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\storePostRequest;
+use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Auth as SupportFacadesAuth;
+use ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad;
 
 class PostController extends Controller
 {
@@ -15,7 +19,15 @@ class PostController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $posts = Post::with('category')->get();
+
+        dd(Post::pluck("name"));
+        
+        if(auth()->user()->name == 'admin'){
+            $posts = Post::with('category')->get();
+        }else{
+            $posts = Post::with('category')
+                ->where('user_id', auth()->user()->id)->get();
+        }
         return view('home', compact('posts'));
     }
 
@@ -32,8 +44,7 @@ class PostController extends Controller
      */
     public function store(storePostRequest $request){
 
-        $validated = $request->safe()->only(['name', 'description', 'category_id']);
-        // $validated = $request->validated();
+        $validated = $request->safe()->only(['name', 'description', 'category_id', 'user_id']);
         $post = new Post();
         $post->create($validated);
         return redirect('posts');
@@ -44,6 +55,7 @@ class PostController extends Controller
      * Display the specified resource.
      */
     public function show(Post $post){
+        Gate::authorize('view', $post);
         return view('show', compact('post'));
     }
 
@@ -51,8 +63,8 @@ class PostController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post){
+        Gate::authorize('view', $post);
         $categories = Category::all();
-        // dd($categories->toArray());
         return view('edit', ['post' => $post, 'categories' => $categories]);
     }
 

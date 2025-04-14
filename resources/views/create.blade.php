@@ -17,7 +17,7 @@
                         @csrf
                         <div class="form-group mb-3">
                           <label for="title">Title </label>
-                          <input name="name" type="text" value="{{ old("title") }}" class="form-control" id="title" placeholder="Enter title">
+                          <input name="name" type="text" value="{{ old("name") }}" class="form-control" id="title" placeholder="Enter title">
                           @error('name')
                               <p class="text-danger">{{ $message }} </p>
                           @enderror
@@ -34,6 +34,8 @@
                               <p class="text-danger">{{ $message }} </p>
                           @enderror
                         </div>
+
+                        <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
 
                         <div class="form-group mb-3">
                             <label for="description"> Enter description </label>

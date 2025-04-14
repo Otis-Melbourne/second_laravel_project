@@ -4,17 +4,20 @@
 
     <div class="container mt-4">
 
-      <div class="mb-4">
+      <div class="mb-4 d-flex justify-content-between">
         <div class="mb-4">
           <form action="{{ url("logout") }}" method="POST">
             @csrf
             <button type="submit" href="{{ url("logout") }}" class="btn btn-outline-danger"> Logout </button>
             <a href="{{ url("posts/create") }}" class="btn btn-outline-success"> New post </a>
           </form>
-
         </div>
 
+        <div>
+          <h3> {{ Auth::user()->name }} </h3>
+        </div>
       </div>
+
 
         <div class="card">
             <div class="card-header text-center">
