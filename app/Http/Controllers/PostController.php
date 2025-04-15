@@ -8,10 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdatePost;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\storePostRequest;
-use Illuminate\Container\Attributes\Auth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
-use Illuminate\Support\Facades\Auth as SupportFacadesAuth;
-use ComposerAutoloaderInit626b9e7ddd47fb7eff9aaa53cce0c9ad;
+use App\Mail\PostCreated;
+use App\Mail\PostStore;
 
 class PostController extends Controller
 {
@@ -19,8 +17,6 @@ class PostController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-
-        dd(Post::pluck("name"));
         
         if(auth()->user()->name == 'admin'){
             $posts = Post::with('category')->get();
@@ -46,8 +42,8 @@ class PostController extends Controller
 
         $validated = $request->safe()->only(['name', 'description', 'category_id', 'user_id']);
         $post = new Post();
-        $post->create($validated);
-        return redirect('posts');
+        $post = $post->create($validated);
+        return redirect('posts')->with('status', config('programmer.messaging.message'));
         
     }
 
@@ -75,7 +71,7 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $validated = $request->validated();
         $post->update($validated);
-        return redirect('posts');
+        return redirect('posts')->with('status', 'post was updated successfully');
     }
 
     /**
@@ -83,6 +79,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post){
         $post->delete();
-        return back();
+        return back()->with('delete', 'post was deleted successfully');
     }
 }
