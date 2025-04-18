@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostCreatedEvent;
 use App\Models\Post;
+use App\Mail\PostStore;
 use App\Models\Category;
+use App\Mail\PostCreated;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdatePost;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\storePostRequest;
-use App\Mail\PostCreated;
-use App\Mail\PostStore;
+use App\Notifications\PostCreationNotification;
+use Illuminate\Support\Facades\Notification;
 
 class PostController extends Controller
 {
@@ -43,6 +46,7 @@ class PostController extends Controller
         $validated = $request->safe()->only(['name', 'description', 'category_id', 'user_id']);
         $post = new Post();
         $post = $post->create($validated);
+        PostCreatedEvent::dispatch($post);
         return redirect('posts')->with('status', config('programmer.messaging.message'));
         
     }
